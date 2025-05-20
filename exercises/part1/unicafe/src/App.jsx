@@ -15,20 +15,33 @@ const Feedback = ({ incGood, incNeutral, incBad }) => {
 const Button = ({ label, onClick }) => <button onClick={onClick}>{label}</button>
 
 const Statistics = ({ good, neutral, bad }) => {
+  if (good + neutral + bad == 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        <p>No feedback yet</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>statistics</h1>
-      <Counter label={"good"} count={good} />
-      <Counter label={"neutral"} count={neutral} />
-      <Counter label={"bad"} count={bad} />
-      <Counter label={"all"} count={good + neutral + bad} />
-      <p>average {(good - bad) / (good + neutral + bad)}</p>
-      <p>positive {100 * good / (good + neutral + bad)}%</p>
+      <table>
+        <tbody>
+          <StatisticLine text={"good"} value={good} />
+          <StatisticLine text={"neutral"} value={neutral} />
+          <StatisticLine text={"bad"} value={bad} />
+          <StatisticLine text={"all"} value={good + neutral + bad} />
+          <StatisticLine text={"average"} value={(good - bad) / (good + neutral + bad)} />
+          <StatisticLine text={"positive"} value={100 * good / (good + neutral + bad)} symbol={'%'}/>
+        </tbody>
+      </table>
     </div>
   )
 }
 
-const Counter = ({ label, count }) => <div>{label} {count}</div>
+const StatisticLine = ({ text, value, symbol }) => <tr><td>{text}</td><td>{value}{symbol}</td></tr>
 
 const App = () => {
   const [good, setGood] = useState(0)
