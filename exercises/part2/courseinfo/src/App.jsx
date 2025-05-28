@@ -21,11 +21,11 @@ const Part = ({part}) => {
 }
 
 const Footer = ({course}) => {
-  const exercises = course.parts.map(part => part.exercises)
+  const total = course.parts.reduce((accumulator, part) => accumulator + part.exercises, 0)
 
   return (
     <>
-      <p><b>Total of {exercises.reduce((accumulator, exercises) => accumulator + exercises, 0)} exercises</b></p>
+      <p><b>Total of {total} exercises</b></p>
     </>
   )
 }
