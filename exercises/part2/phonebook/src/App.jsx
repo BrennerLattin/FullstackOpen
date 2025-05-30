@@ -26,10 +26,18 @@ const App = () => {
 
   const onSubmit = (event) => {
     event.preventDefault()
-    if (newName.length === 0)
+    if (newName.length === 0) {
+      alert("Please enter a name")
       return
+    }
+    if (people.some(person => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`)
+      return
+    }
 
     const newPerson = { name: newName }
+
+    
     setPeople(people.concat(newPerson))
     setNewName('')
   }
