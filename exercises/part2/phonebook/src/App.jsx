@@ -45,12 +45,15 @@ const App = () => {
     const newPerson = { 
       name: newName, 
       number: newNumber,
-      id: String(people.length + 1)
     }
-    
-    setPeople(people.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
+
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPeople(people.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const filteredPeople = people.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
