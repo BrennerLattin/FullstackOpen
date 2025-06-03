@@ -39,8 +39,12 @@ const App = () => {
       alert("Please enter a name and number")
       return
     }
-    if (people.some(person => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook`)
+    const existingPerson = people.find(person => person.name === newName)
+    if (existingPerson) {
+      if (existingPerson.number === newNumber)
+        alert(`${newName} is already added to the phonebook`)
+      else
+        updatePerson({ ...existingPerson, number: newNumber })
       return
     }
 
@@ -58,6 +62,30 @@ const App = () => {
       })
   }
 
+  const updatePerson = newPerson => {
+    if (confirm(`${newPerson.name} is already added to the phonebook. Replace the existing number with a new one?`))
+      peopleService
+        .update(newPerson)
+        .then(updatedPerson => {
+          setPeople(people.map(
+            person => person.id === newPerson.id ? updatedPerson : person
+          ))
+          setNewName('')
+          setNewNumber('')
+        })
+  }
+
+  const deletePerson = (event, person) => {
+      event.preventDefault()
+
+    if (confirm(`Delete ${person.name}?`))
+      peopleService
+        .delete(person.id)
+        .then(response =>
+          setPeople(people.filter(p => p.id !== person.id))
+        )
+    }
+
   const filteredPeople = people.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
@@ -70,7 +98,10 @@ const App = () => {
         handleNameInput={handleNameInput} handleNumberInput={handleNumberInput} onSubmit={onSubmit} 
       />
       
-      <Numbers people={filteredPeople} />
+      <Numbers 
+        people={filteredPeople}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 }
