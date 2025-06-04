@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notificationMessage, setNotification] = useState(null)
+  const [operationSuccess, setSuccess] = useState(true)
 
   useEffect(() => {
     peopleService
@@ -62,6 +63,7 @@ const App = () => {
         setNewNumber('')
         notifySuccess('Added', newPerson)
       })
+      .catch(error => notifyFailure('add', newPerson))
   }
 
   const updatePerson = newPerson => {
@@ -76,6 +78,7 @@ const App = () => {
           setNewNumber('')
           notifySuccess('Updated', newPerson)
         })
+        .catch(error => notifyFailure('update', newPerson))
   }
 
   const deletePerson = (event, person) => {
@@ -88,10 +91,18 @@ const App = () => {
           setPeople(people.filter(p => p.id !== person.id))
           notifySuccess('Deleted', person)
         })
+        .catch(error => notifyFailure('delete', person))
     }
 
   const notifySuccess = (operation, person) => {
+    setSuccess(true)
     setNotification(`${operation} ${person.name}`)
+    setTimeout(() => setNotification(null), 5000)
+  }
+
+  const notifyFailure = (operation, person) => {
+    setSuccess(false)
+    setNotification(`Failed to ${operation} ${person.name}`)
     setTimeout(() => setNotification(null), 5000)
   }
 
@@ -100,7 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage}/>
+      <Notification message={notificationMessage} success={operationSuccess} />
       <Filter filter={filter} handleFilterInput={handleFilterInput} />
       
       <NumberForm 
