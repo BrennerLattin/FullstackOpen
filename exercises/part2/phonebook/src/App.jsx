@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 
 import peopleService from './services/people'
 
+import Notification from './components/Notification'
 import Filter from './components/Filter'
 import NumberForm from './components/NumberForm'
 import Numbers from './components/Numbers'
@@ -12,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notificationMessage, setNotification] = useState(null)
 
   useEffect(() => {
     peopleService
@@ -59,6 +60,7 @@ const App = () => {
         setPeople(people.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        notifySuccess('Added', newPerson)
       })
   }
 
@@ -72,6 +74,7 @@ const App = () => {
           ))
           setNewName('')
           setNewNumber('')
+          notifySuccess('Updated', newPerson)
         })
   }
 
@@ -81,16 +84,23 @@ const App = () => {
     if (confirm(`Delete ${person.name}?`))
       peopleService
         .delete(person.id)
-        .then(response =>
+        .then(response => {
           setPeople(people.filter(p => p.id !== person.id))
-        )
+          notifySuccess('Deleted', person)
+        })
     }
+
+  const notifySuccess = (operation, person) => {
+    setNotification(`${operation} ${person.name}`)
+    setTimeout(() => setNotification(null), 5000)
+  }
 
   const filteredPeople = people.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage}/>
       <Filter filter={filter} handleFilterInput={handleFilterInput} />
       
       <NumberForm 
