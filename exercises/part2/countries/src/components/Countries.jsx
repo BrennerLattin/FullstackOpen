@@ -1,4 +1,4 @@
-const Countries = ({ countries, allCountriesLength }) => {
+const Countries = ({ countries, allCountriesLength, setCountry }) => {
     if (countries.length <= 1 || countries.length === allCountriesLength)
         return null
 
@@ -10,6 +10,7 @@ const Countries = ({ countries, allCountriesLength }) => {
             {countries.map(country =>
                 <div key={country.name.official}>
                     {country.name.common}
+                    <button onClick={() => setCountry(country)}>Show</button>
                 </div>
             )}
         </div>

@@ -35,7 +35,7 @@ function App() {
   return (
     <div>
       <Search filter={filter} setFilter={setFilter} />
-      <Countries countries={countries} allCountriesLength={allCountries.length} />
+      <Countries countries={countries} allCountriesLength={allCountries.length} setCountry={setCountry} />
       <Country country={country} />
     </div>
   )
