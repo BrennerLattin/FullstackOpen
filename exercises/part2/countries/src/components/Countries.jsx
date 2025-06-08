@@ -1,5 +1,5 @@
-const Countries = ({ countries, allCountriesLength, setCountry }) => {
-    if (countries.length <= 1 || countries.length === allCountriesLength)
+const Countries = ({ countries, setCountry }) => {
+    if (countries.length <= 1)
         return null
 
     if (countries.length > 10)
