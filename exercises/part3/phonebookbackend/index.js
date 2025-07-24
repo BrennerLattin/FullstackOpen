@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 let entries = [
     { 
@@ -24,19 +25,38 @@ let entries = [
     }
 ]
 
+const generateId = () => {
+  const max = 1000
+  const min = 1
+  const id = Math.floor((max - min) * Math.random() + min)
+  return String(id)
+}
+
 app.get('/api/persons', (request, response) => {
     response.json(entries)
 })
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-
     const person = entries.find(entry => entry.id === id)
 
     if (!person)
         return response.status(404).end()
 
     response.json(person)
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const entry = {
+    id: generateId(),
+    ...body
+  }
+
+  entries = entries.concat(entry)
+  
+  response.json(entry)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
