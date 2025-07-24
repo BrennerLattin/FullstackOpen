@@ -49,9 +49,20 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
+  if (!body.name || !body.number)
+    return response.status(400).json({
+      error: 'Body must include name and number'
+    })
+
+  if (entries.some(entry => entry.name === body.name)) // case sensitive
+    return response.status(400).json({
+      error: 'Entry with name already exists'
+    })
+
   const entry = {
     id: generateId(),
-    ...body
+    name: body.name,
+    number: body.number
   }
 
   entries = entries.concat(entry)
