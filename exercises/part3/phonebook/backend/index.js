@@ -14,12 +14,14 @@ morgan.token(
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
-    Person.find({})
+    Person
+      .find({})
       .then(people => response.json(people))
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id)
+    Person
+      .findById(request.params.id)
       .then(person => response.json(person))
 })
 
@@ -31,20 +33,15 @@ app.post('/api/persons', (request, response) => {
       error: 'Body must include name and number'
     })
 
-  if (entries.some(entry => entry.name === body.name)) // case sensitive
-    return response.status(400).json({
-      error: 'Entry with name already exists'
-    })
 
-  const entry = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
-
-  entries = entries.concat(entry)
+  })
   
-  response.json(entry)
+  person
+    .save()
+    .then(savedPerson => response.json(savedPerson))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
