@@ -22,7 +22,12 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response, next) => {
     Person
       .findById(request.params.id)
-      .then(person => response.json(person))
+      .then(person => {
+        if (!person)
+          return response.status(404).end()
+        else
+          response.json(person)
+      })
       .catch(error => next(error))
 })
 
