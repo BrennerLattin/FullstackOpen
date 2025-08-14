@@ -14,14 +14,12 @@ morgan.token(
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
-    Person
-      .find({})
+    Person.find({})
       .then(people => response.json(people))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person
-      .findById(request.params.id)
+    Person.findById(request.params.id)
       .then(person => {
         if (!person)
           return response.status(404).end()
@@ -37,10 +35,10 @@ app.put('/api/persons/:id', (request, response, next) => {
     { number: request.body.number },
     { new: true }
   )
-  .then(updatedPerson => {
-    response.json(updatedPerson)
-  })
-  .catch(error => next(error))
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -57,8 +55,7 @@ app.post('/api/persons', (request, response) => {
     number
   })
   
-  person
-    .save()
+  person.save()
     .then(savedPerson => response.json(savedPerson))
 })
 
@@ -71,11 +68,15 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-    response.send(`
-        <div>Phonebook has info for ${entries.length} people</div>
+  Person.find({})
+    .then(result => {
+      response.send(`
+        <div>Phonebook has info for ${result.length} people</div>
         <br>
         <div>${new Date()}</div>
-    `)
+      `)
+    })
+    
 })
 
 const errorHandler = (error, request, response, next) => {
