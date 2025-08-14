@@ -31,18 +31,30 @@ app.get('/api/persons/:id', (request, response, next) => {
       .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
-  const body = request.body
+app.put('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { number: request.body.number },
+    { new: true }
+  )
+  .then(updatedPerson => {
+    response.json(updatedPerson)
+  })
+  .catch(error => next(error))
+})
 
-  if (!body.name || !body.number)
+app.post('/api/persons', (request, response) => {
+  const { name, number } = request.body
+
+  if (!name || !number)
     return response.status(400).json({
       error: 'Body must include name and number'
     })
 
 
   const person = new Person({
-    name: body.name,
-    number: body.number
+    name, 
+    number
   })
   
   person
