@@ -61,9 +61,9 @@ const App = () => {
         setPeople(people.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-        notifySuccess('Added', newPerson)
+        notifySuccess(`Added ${newPerson.name}`)
       })
-      .catch(error => notifyFailure('add', newPerson))
+      .catch(error => notifyFailure(error.response.data.error))
   }
 
   const updatePerson = newPerson => {
@@ -76,9 +76,9 @@ const App = () => {
           ))
           setNewName('')
           setNewNumber('')
-          notifySuccess('Updated', newPerson)
+          notifySuccess(`Updated ${newPerson.name}`)
         })
-        .catch(error => notifyFailure('update', newPerson))
+        .catch(error => notifyFailure(error.response.data.error))
   }
 
   const deletePerson = (event, person) => {
@@ -89,20 +89,20 @@ const App = () => {
         .delete(person.id)
         .then(response => {
           setPeople(people.filter(p => p.id !== person.id))
-          notifySuccess('Deleted', person)
+          notifySuccess(`Deleted ${person.name}`)
         })
-        .catch(error => notifyFailure('delete', person))
+        .catch(error => notifyFailure(`Failed to delete ${person.name}`))
     }
 
-  const notifySuccess = (operation, person) => {
+  const notifySuccess = (message) => {
     setSuccess(true)
-    setNotification(`${operation} ${person.name}`)
+    setNotification(message)
     setTimeout(() => setNotification(null), 5000)
   }
 
-  const notifyFailure = (operation, person) => {
+  const notifyFailure = (message) => {
     setSuccess(false)
-    setNotification(`Failed to ${operation} ${person.name}`)
+    setNotification(message)
     setTimeout(() => setNotification(null), 5000)
   }
 
