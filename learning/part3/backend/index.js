@@ -12,8 +12,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  Note
-    .find({})
+  Note.find({})
     .then(notes => response.json(notes))
 })
 
@@ -35,7 +34,7 @@ app.put('/api/notes/:id', (request, response, next) => {
     .then(note => {
       if (!note)
         return response.status(404).end()
-      
+
       note.content = content
       note.important = important
 
@@ -48,10 +47,6 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
-
-  if (!body.content) {
-    return response.status(400).json({ error: 'content missing' })
-  }
 
   const note = new Note({
     content: body.content,
@@ -66,7 +61,7 @@ app.post('/api/notes', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
