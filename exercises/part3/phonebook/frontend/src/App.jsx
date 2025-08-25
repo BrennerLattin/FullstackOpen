@@ -87,17 +87,17 @@ const App = () => {
     if (confirm(`Delete ${person.name}?`))
       peopleService
         .delete(person.id)
-        .then(response => {
+        .then(() => {
           setPeople(people.filter(p => p.id !== person.id))
           notifySuccess(`Deleted ${person.name}`)
         })
-        .catch(error => notifyFailure(`Failed to delete ${person.name}`))
+        .catch(() => notifyFailure(`Failed to delete ${person.name}`))
     }
 
   const notifySuccess = (message) => {
     setSuccess(true)
     setNotification(message)
-    setTimeout(() => setNotification(null), 5000)
+    setTimeout(() => setNotification(null), 5000) // if you get more than one notification in a short timeframe, this can cause the latest notification to disappear earlier than it should. If I cared enough to fix it, I would use a queueing system for notifications
   }
 
   const notifyFailure = (message) => {

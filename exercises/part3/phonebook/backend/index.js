@@ -8,25 +8,25 @@ app.use(express.json())
 app.use(express.static('dist'))
 
 morgan.token(
-  'body', 
-  (request, response) => request.method === 'POST' ? JSON.stringify(request.body) : ''
+  'body',
+  (request) => request.method === 'POST' ? JSON.stringify(request.body) : ''
 )
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
-    Person.find({})
-      .then(people => response.json(people))
+  Person.find({})
+    .then(people => response.json(people))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id)
-      .then(person => {
-        if (!person)
-          return response.status(404).end()
-        else
-          response.json(person)
-      })
-      .catch(error => next(error))
+  Person.findById(request.params.id)
+    .then(person => {
+      if (!person)
+        return response.status(404).end()
+      else
+        response.json(person)
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -51,10 +51,10 @@ app.post('/api/persons', (request, response, next) => {
 
 
   const person = new Person({
-    name, 
+    name,
     number
   })
-  
+
   person.save()
     .then(savedPerson => response.json(savedPerson))
     .catch(error => next(error))
@@ -62,7 +62,7 @@ app.post('/api/persons', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -77,7 +77,7 @@ app.get('/info', (request, response) => {
         <div>${new Date()}</div>
       `)
     })
-    
+
 })
 
 const errorHandler = (error, request, response, next) => {
