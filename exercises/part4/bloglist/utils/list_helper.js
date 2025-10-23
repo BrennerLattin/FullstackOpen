@@ -36,7 +36,7 @@ const maxItem = (list, measure) => {
 const countItems = (list, key, measure) => {
   const counts = { }
   list.forEach(item => {
-    count = counts[key(item)] || 0
+    const count = counts[key(item)] || 0
     counts[key(item)] = count + measure(item)
   })
   return counts
