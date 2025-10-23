@@ -82,9 +82,25 @@ describe('favorite blog', () => {
     assert.deepStrictEqual(bestBlog, blogs[0])
   })
 
-  test('when list has multiple blogs, likes of returned blog are maximum among the blogs', () => {
+  test('when list has multiple blogs, like count of returned blog is maximum among the blogs', () => {
     const bestBlog = listHelper.favoriteBlog(blogs)
     assert.strictEqual(bestBlog.likes, 12)
+  })
+})
+
+describe('most blogs', () => {
+  test('when list has one blog, equals object with author of that blog with count 1', () => {
+    const singleBlog = [blogs[0]]
+
+    const bestAuthor = listHelper.mostBlogs(singleBlog) // better naming
+    assert.strictEqual(bestAuthor.author, 'Michael Chan')
+    assert.strictEqual(bestAuthor.blogs, 1)
+  })
+
+  test('when list has multiple blogs, equals object with author of most blogs and count equal to the number of blogs by that author', () => {
+    const bestAuthor = listHelper.mostBlogs(blogs)
+    assert.strictEqual(bestAuthor.author, 'Robert C. Martin')
+    assert.strictEqual(bestAuthor.blogs, 3)
   })
 })
 

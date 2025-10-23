@@ -5,14 +5,31 @@ const totalLikes = (blogs) => blogs.reduce(
 
 const favoriteBlog = (blogs) => {
   let bestBlog = blogs[0]
-  for (let i = 0; i < blogs.length; i++) {
-    if (blogs[i].likes > bestBlog.likes) {
-      bestBlog = blogs[i];
+  blogs.forEach(blog => {
+    if (blog.likes > bestBlog.likes) {
+      bestBlog = blog
     }
-  }
+  })
   return bestBlog
 }
 
+const mostBlogs = (blogs) => {
+  const blogCounts = { }
+  blogs.forEach(blog => {
+    count = blogCounts[blog.author] || 0
+    blogCounts[blog.author] = count + 1
+  })
+  
+  bestAuthor = { author: "none", blogs: -1} // could possibly be nicer
+  for (const author in blogCounts) {
+    if (blogCounts[author] > bestAuthor.blogs){
+      bestAuthor = { author: author, blogs: blogCounts[author] }
+    }
+  }
+
+  return bestAuthor
+}
+
 module.exports = {
-   totalLikes, favoriteBlog
+   totalLikes, favoriteBlog, mostBlogs
 }
