@@ -104,3 +104,19 @@ describe('most blogs', () => {
   })
 })
 
+describe('most likes', () => {
+  test('when list has one blog, equals object with author and likes of that blog', () => {
+    const singleBlog = [blogs[0]]
+
+    const bestAuthor = listHelper.mostLikes(singleBlog) // better naming
+    assert.strictEqual(bestAuthor.author, 'Michael Chan')
+    assert.strictEqual(bestAuthor.likes, 7)
+  })
+
+  test('when list has multiple blogs, equals object with author of most likes and likes equal to the sum of likes of blogs by that author', () => { // better description
+    const bestAuthor = listHelper.mostLikes(blogs)
+    assert.strictEqual(bestAuthor.author, 'Edsger W. Dijkstra')
+    assert.strictEqual(bestAuthor.likes, 17)
+  })
+})
+
