@@ -4,47 +4,42 @@ const totalLikes = (blogs) => blogs.reduce(
 )
 
 const favoriteBlog = (blogs) => {
-  let bestBlog = blogs[0]
-  blogs.forEach(blog => {
-    if (blog.likes > bestBlog.likes) {
-      bestBlog = blog
-    }
-  })
-  return bestBlog
+  return maxItem(blogs, blog => blog.likes)
 }
 
 const mostBlogs = (blogs) => {
-  const blogCounts = { }
-  blogs.forEach(blog => {
-    count = blogCounts[blog.author] || 0
-    blogCounts[blog.author] = count + 1
-  })
-  
-  bestAuthor = { author: "none", blogs: -1} // could possibly be nicer
-  for (const author in blogCounts) {
-    if (blogCounts[author] > bestAuthor.blogs){
-      bestAuthor = { author: author, blogs: blogCounts[author] }
-    }
-  }
+  const blogCounts = countItems(blogs, blog => blog.author, blog => 1)
+  const authorCountPairs = Object.entries(blogCounts)
+    .map(([ author, blogCount ]) => ({ author, blogs: blogCount }))
 
-  return bestAuthor
+  return maxItem(authorCountPairs, pair => pair.blogs)
 }
 
 const mostLikes = (blogs) => {
-  const likeCounts = { }
-  blogs.forEach(blog => {
-    count = likeCounts[blog.author] || 0
-    likeCounts[blog.author] = count + blog.likes
-  })
-  
-  bestAuthor = { author: "none", likes: -1} // could possibly be nicer
-  for (const author in likeCounts) {
-    if (likeCounts[author] > bestAuthor.likes){
-      bestAuthor = { author: author, likes: likeCounts[author] }
-    }
-  }
+  const likeCounts = countItems(blogs, blog => blog.author, blog => blog.likes)
+  const authorLikePairs = Object.entries(likeCounts)
+    .map(([ author, likes ]) => ({ author, likes }))
 
-  return bestAuthor
+  return maxItem(authorLikePairs, pair => pair.likes)
+}
+
+const maxItem = (list, measure) => {
+  let max = list[0];
+  list.forEach(item => {
+    if (measure(item) > measure(max)) {
+      max = item
+    }
+  })
+  return max
+}
+
+const countItems = (list, key, measure) => {
+  const counts = { }
+  list.forEach(item => {
+    count = counts[key(item)] || 0
+    counts[key(item)] = count + measure(item)
+  })
+  return counts
 }
 
 module.exports = {

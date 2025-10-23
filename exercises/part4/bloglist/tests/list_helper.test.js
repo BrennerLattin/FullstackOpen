@@ -113,7 +113,7 @@ describe('most likes', () => {
     assert.strictEqual(bestAuthor.likes, 7)
   })
 
-  test('when list has multiple blogs, equals object with author of most likes and likes equal to the sum of likes of blogs by that author', () => { // better description
+  test('when list has multiple blogs, equals object with author with highest like count and likes equal to that like count', () => { // better description
     const bestAuthor = listHelper.mostLikes(blogs)
     assert.strictEqual(bestAuthor.author, 'Edsger W. Dijkstra')
     assert.strictEqual(bestAuthor.likes, 17)
